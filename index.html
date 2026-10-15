@@ -3,25 +3,29 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Smart Address System - THP</title>
+    <title>Smart Address & Label Management System</title>
     
-    <meta name="theme-color" content="#005088">
+    <!-- Theme & Mobile App Setup (Pastel Purple & Thailand Post Tone) -->
+    <meta name="theme-color" content="#6B21A8">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="เบิกสินค้า">
-    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/679/679821.png">
+    <meta name="apple-mobile-web-app-title" content="Smart Address">
+    
+    <!-- App Icon (Thailand Post / Package Label Theme) -->
+    <link rel="apple-touch-icon" href="https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/ThailandPost_Logo_%282021%29.svg/512px-ThailandPost_Logo_%282021%29.svg.png">
     <link rel="manifest" id="dynamic-manifest">
 
     <style>
-        /* ปรับให้ลื่นไหลและรองรับการแสดงผลเต็มหน้าจอ (เหมาะกับทำแอปมือถือ/PWA) */
+        /* Smooth scrolling & full viewport setup */
         body, html { 
             margin: 0; 
             padding: 0; 
             height: 100%; 
             width: 100%; 
             overflow: hidden; 
-            background-color: #f0f4f8; 
+            background-color: #FAF5FF; /* Pastel Background */
             -webkit-overflow-scrolling: touch; 
+            font-family: 'Kanit', 'Sarabun', sans-serif;
         }
         iframe { 
             border: none; 
@@ -29,24 +33,44 @@
             height: 100%; 
             display: block;
         }
-        /* หน้าจอโหลดระหว่างรอ iframe */
+        /* Loader ระหว่างรอ Apps Script โหลด */
         #loader {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-family: sans-serif;
-            color: #005088;
-            font-weight: bold;
+            color: #6B21A8;
+            font-weight: 600;
+            font-size: 0.95rem;
             z-index: -1;
+            display: flex;
+            flex-col;
+            align-items: center;
+            gap: 12px;
+            text-align: center;
+        }
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #E9D5FF;
+            border-top: 4px solid #EA580C; /* THP Orange */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
     
-    <div id="loader">กำลังเชื่อมต่อระบบ...</div>
+    <div id="loader">
+        <div class="spinner"></div>
+        <div>กำลังเชื่อมต่อระบบ Smart Address...</div>
+    </div>
 
-    <!-- อัปเดต URL เป็นลิงก์ Apps Script ตัวล่าสุดแล้ว -->
+    <!-- ลิงก์ Apps Script ของโปรเจกต์ -->
     <iframe 
         id="mainApp"
         src="https://script.google.com/macros/s/AKfycbz3QF773VAgP_T_6fOhsloW2gNAj0-l762Mb-3kJNLZidjyNECZcTFXlyHsZE2aOXuw5Q/exec"
@@ -54,17 +78,17 @@
     ></iframe>
 
     <script>
-        // 📱 สร้าง Dynamic Web App Manifest สำหรับ PWA (Add to Home Screen)
+        // 📱 Dynamic PWA Manifest Setup
         document.addEventListener("DOMContentLoaded", function() {
             const appManifest = {
-                "name": "ระบบเบิกสินค้า โครงการไทยช่วยไทย",
-                "short_name": "เบิกสินค้า",
+                "name": "Smart Address & Label Management System",
+                "short_name": "Smart Address",
                 "start_url": window.location.href, 
                 "display": "standalone",
-                "background_color": "#f0f4f8",
-                "theme_color": "#005088",
+                "background_color": "#FAF5FF",
+                "theme_color": "#6B21A8",
                 "icons": [{
-                    "src": "https://cdn-icons-png.flaticon.com/512/679/679821.png",
+                    "src": "https://upload.wikimedia.org/wikipedia/commons/thumb/f/fc/ThailandPost_Logo_%282021%29.svg/512px-ThailandPost_Logo_%282021%29.svg.png",
                     "sizes": "512x512",
                     "type": "image/png"
                 }]
@@ -73,10 +97,10 @@
             document.getElementById('dynamic-manifest').href = URL.createObjectURL(manifestBlob);
         });
 
-        // 🔄 Logic: iframe loading
+        // 🔄 Logic: iframe loading & Auto Focus
         const iframe = document.getElementById('mainApp');
         iframe.onload = function() {
-            console.log("Apps Script Loaded Successfully");
+            console.log("Smart Address System Loaded Successfully");
             iframe.contentWindow.focus();
         };
 
