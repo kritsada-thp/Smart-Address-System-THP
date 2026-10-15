@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>ระบบเบิกสินค้า โครงการไทยช่วยไทย</title>
+    
+    <meta name="theme-color" content="#005088">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="เบิกสินค้า">
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/679/679821.png">
+    <link rel="manifest" id="dynamic-manifest">
+
+    <style>
+        /* ปรับให้ลื่นไหลและรองรับการแสดงผลเต็มหน้าจอ (เหมาะกับทำแอปมือถือ/PWA) */
+        body, html { 
+            margin: 0; 
+            padding: 0; 
+            height: 100%; 
+            width: 100%; 
+            overflow: hidden; 
+            background-color: #f0f4f8; 
+            -webkit-overflow-scrolling: touch; 
+        }
+        iframe { 
+            border: none; 
+            width: 100%; 
+            height: 100%; 
+            display: block;
+        }
+        /* หน้าจอโหลดระหว่างรอ iframe */
+        #loader {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: sans-serif;
+            color: #005088;
+            font-weight: bold;
+            z-index: -1;
+        }
+    </style>
+</head>
+<body>
+    
+    <div id="loader">กำลังเชื่อมต่อระบบ...</div>
+
+    <!-- อัปเดต URL เป็นลิงก์ Apps Script ตัวล่าสุดแล้ว -->
+    <iframe 
+        id="mainApp"
+        src="https://script.google.com/macros/s/AKfycbz3QF773VAgP_T_6fOhsloW2gNAj0-l762Mb-3kJNLZidjyNECZcTFXlyHsZE2aOXuw5Q/exec"
+        allow="geolocation; microphone; camera; clipboard-read; clipboard-write;"
+    ></iframe>
+
+    <script>
+        // 📱 สร้าง Dynamic Web App Manifest สำหรับ PWA (Add to Home Screen)
+        document.addEventListener("DOMContentLoaded", function() {
+            const appManifest = {
+                "name": "ระบบเบิกสินค้า โครงการไทยช่วยไทย",
+                "short_name": "เบิกสินค้า",
+                "start_url": window.location.href, 
+                "display": "standalone",
+                "background_color": "#f0f4f8",
+                "theme_color": "#005088",
+                "icons": [{
+                    "src": "https://cdn-icons-png.flaticon.com/512/679/679821.png",
+                    "sizes": "512x512",
+                    "type": "image/png"
+                }]
+            };
+            const manifestBlob = new Blob([JSON.stringify(appManifest)], {type: 'application/json'});
+            document.getElementById('dynamic-manifest').href = URL.createObjectURL(manifestBlob);
+        });
+
+        // 🔄 Logic: iframe loading
+        const iframe = document.getElementById('mainApp');
+        iframe.onload = function() {
+            console.log("Apps Script Loaded Successfully");
+            iframe.contentWindow.focus();
+        };
+
+        // Fallback รีโหลดหากหน้าค้าง
+        setTimeout(() => {
+            if (!iframe.src) {
+                iframe.src = iframe.src;
+            }
+        }, 3000);
+    </script>
+</body>
+</html>
